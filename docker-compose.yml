@@ -1,6 +1,18 @@
 version: "3.7"
 
 services:
+  database_postgres:
+    image: postgres
+    container_name: rent-api-postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: docker
+      POSTGRES_USER: docker
+      POSTGRES_DB: rent_api
+    volumes:
+      - pgdata:/data/postgres
   app:
     build: .
     container_name: rent-api-node-ts
@@ -8,3 +20,9 @@ services:
       - "3333:3333"
     volumes:
       - .:/the/workdir/app
+
+
+
+volumes:
+  pgdata: 
+    driver: local
