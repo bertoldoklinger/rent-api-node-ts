@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   database_postgres:
-    image: postgres
+    image: bitnami/postgresql
     container_name: rent-api-postgres
     restart: always
     ports:
@@ -10,7 +10,7 @@ services:
     environment:
       POSTGRES_PASSWORD: docker
       POSTGRES_USER: docker
-      POSTGRES_DB: rent_api
+      POSTGRES_DB: rent-api-postgres
     volumes:
       - pgdata:/data/postgres
   app:
