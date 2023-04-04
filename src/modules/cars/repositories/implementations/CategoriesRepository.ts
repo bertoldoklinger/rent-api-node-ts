@@ -1,3 +1,4 @@
+import { prisma } from "../../../../lib/prisma";
 import { Category } from "../../entities/Category";
 import {
   ICategoriesRepository,
@@ -5,10 +6,10 @@ import {
 } from "../ICategoriesRepository";
 
 class CategoriesRepository implements ICategoriesRepository {
-  private categories: Category[];
+  private repository: any;
   private static INSTANCE: CategoriesRepository
   private constructor() {
-    this.categories = [];
+    this.repository = prisma.category
   }
 
   public static getInstance(): CategoriesRepository {
@@ -18,24 +19,29 @@ class CategoriesRepository implements ICategoriesRepository {
     return CategoriesRepository.INSTANCE
   }
 
-  create({ description, name }: ICreateCategoryDTO): void {
-    const category = new Category();
+  async create({ description, name }: ICreateCategoryDTO): Promise<Category> {
 
-    Object.assign(category, {
-      name,
-      description,
-      created_at: new Date(),
-    });
-
-    this.categories.push(category);
+    const category = await prisma.category.create({
+      data: {
+        name,
+        description
+      }
+    })
+    return category
   }
 
-  list(): Category[] {
-    return this.categories;
+  async list(): Promise<Category[]> {
+    const categories = await prisma.category.findMany()
+
+    return categories
   }
 
-  findByName(name: string) {
-    const category = this.categories.find((category) => category.name === name);
+  async findByName(name: string) {
+    const category = await prisma.category.findFirst({
+      where: {
+        name: name
+      }
+    })
     return category;
   }
 }
