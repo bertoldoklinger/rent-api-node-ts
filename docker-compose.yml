@@ -2,14 +2,14 @@ version: "3.7"
 
 services:
   database_postgres:
-    image: bitnami/postgresql
+    image: postgres
     container_name: rent-api-postgres
     restart: always
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_PASSWORD: docker
       POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
       POSTGRES_DB: rent-api-postgres
     volumes:
       - pgdata:/data/postgres

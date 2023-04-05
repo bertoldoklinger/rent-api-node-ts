@@ -6,28 +6,17 @@ import {
 } from "../ICategoriesRepository";
 
 class CategoriesRepository implements ICategoriesRepository {
-  private repository: any;
-  private static INSTANCE: CategoriesRepository
-  private constructor() {
-    this.repository = prisma.category
-  }
+  constructor() { }
 
-  public static getInstance(): CategoriesRepository {
-    if (!CategoriesRepository.INSTANCE) {
-      CategoriesRepository.INSTANCE = new CategoriesRepository()
-    }
-    return CategoriesRepository.INSTANCE
-  }
+  async create({ description, name }: ICreateCategoryDTO): Promise<void> {
 
-  async create({ description, name }: ICreateCategoryDTO): Promise<Category> {
-
-    const category = await prisma.category.create({
+    await prisma.category.create({
       data: {
         name,
         description
       }
     })
-    return category
+
   }
 
   async list(): Promise<Category[]> {
@@ -36,13 +25,14 @@ class CategoriesRepository implements ICategoriesRepository {
     return categories
   }
 
-  async findByName(name: string) {
+  async findByName(name: string): Promise<Category | null> {
     const category = await prisma.category.findFirst({
       where: {
         name: name
       }
     })
-    return category;
+
+    return category
   }
 }
 
